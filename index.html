@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Flip</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="book-container">
+
+        <div class="book">
+
+            <!-- Scene 5 LEFT (static) -->
+            <div class="page static-left">
+                <img src="assets/scene5/scene5-left.jpg" alt="Scene 5 Left">
+            </div>
+
+            <!-- Scene 5 RIGHT (flipping page) -->
+            <div class="page flip-page" id="flipPage">
+                <div class="front">
+                    <img src="assets/scene5/scene5-right.jpg" alt="Scene 5 Right">
+                </div>
+                <div class="back">
+                    <img src="assets/scene6/scene6-left.jpg" alt="Scene 6 Left">
+                </div>
+            </div>
+
+            <div class="page flip-page" id="page2">
+                <div class="front">
+                    <img src="assets/scene6/scene6-right.jpg">
+                </div>
+                <div class="back">
+                    <img src="assets/scene7/scene7-left.jpg">
+                </div>
+            </div>
+
+            <!-- Scene 6 RIGHT (revealed after flip) -->
+            <div class="page static-right">
+                <img src="assets/scene6/scene6-right.jpg">
+            </div>
+
+        </div>
+
+        <button class="flip-btn" onclick="flipPage(event)">
+            <img src="assets/button.jpg">
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
