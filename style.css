@@ -167,7 +167,7 @@ body {
 .train-bg {
     position: absolute;
     inset: 0;
-    background: url('assets/scene1&2/train.gif') center bottom / cover no-repeat;
+    background: url('assets/scene1-2/train.gif') center bottom / cover no-repeat;
 }
 
 .bag-overlay {
