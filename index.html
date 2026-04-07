@@ -3,17 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Book Flip</title>
+    <title>meant to be?</title>
     <link rel="stylesheet" href="style.css" />
   </head>
-
   <body>
     <audio id="mainAudio" src="assets/scene1&2/scene1and2.mp3"></audio>
 
-    <!-- SCENE 0 — start screen -->
+    <!-- SCENE 0 -->
     <div id="scene0" class="scene-overlay scene0-bg">
       <div class="scene0-content">
-        <p class="scene0-title">my semester away</p>
+        <p class="scene0-title">meant to be?</p>
         <p class="scene0-sub">a scrapbook</p>
         <button id="startBtn" class="start-btn">open</button>
       </div>
@@ -26,7 +25,8 @@
       <img src="assets/scene1&2/hand.png" id="hand" class="hand-overlay" />
     </div>
 
-    <div id="audioControls" class="audio-controls">
+    <!-- AUDIO CONTROLS -->
+    <div id="audioControls" class="audio-controls hidden">
       <button id="playPauseBtn" class="play-pause-btn" aria-label="Play/Pause">
         <svg
           id="iconPlay"
@@ -62,32 +62,15 @@
     <!-- SCENE 2 -->
     <div id="scene2" class="scene-overlay hidden">
       <img id="scn2img" src="assets/scene1&2/scn2.png" class="cover-full" />
-      <div class="click-hint">click to open</div>
+      <button id="openBookBtn" class="open-book-btn">open the scrapbook</button>
     </div>
 
+    <!-- BOOK -->
     <div class="book-container">
-      <!-- COVER : flips open to reveal book -->
-       <div class="book-container book-hidden"></div>
-      <div class="page flip-page" id="coverPage">
-        <div class="front">
-          <img
-            src="assets/scene1&2/scn2.png"
-            alt="Cover"
-            style="object-fit: cover"
-          />
-        </div>
-
-        <div class="back inside-cover"></div>
-        </div>
-      </div>
-
       <div class="book">
-        <!-- Scene 5 LEFT (static) -->
         <div class="page static-left">
           <img src="assets/scene5/scene5-left.jpg" alt="Scene 5 Left" />
         </div>
-
-        <!-- Scene 5 RIGHT (flipping page) -->
         <div class="page flip-page" id="flipPage">
           <div class="front">
             <img src="assets/scene5/scene5-right.jpg" alt="Scene 5 Right" />
@@ -96,7 +79,6 @@
             <img src="assets/scene6/scene6-left.jpg" alt="Scene 6 Left" />
           </div>
         </div>
-
         <div class="page flip-page" id="page2">
           <div class="front">
             <img src="assets/scene6/scene6-right.jpg" />
@@ -105,13 +87,10 @@
             <img src="assets/scene7/scene7-left.jpg" />
           </div>
         </div>
-
-        <!-- Scene 6 RIGHT (revealed after flip) -->
         <div class="page static-right">
           <img src="assets/scene6/scene6-right.jpg" />
         </div>
       </div>
-
       <button class="flip-btn" onclick="flipPage(event)">
         <img src="assets/button.jpg" />
       </button>
