@@ -10,19 +10,23 @@ function flipPage() {
 
 (function () {
   const audio         = document.getElementById('mainAudio');
+  const shuffleAudio  = document.getElementById('shuffleAudio');
+  const scene2Audio   = document.getElementById('scene2Audio');
   const scene0        = document.getElementById('scene0');
   const scene1        = document.getElementById('scene1');
   const scene2        = document.getElementById('scene2');
   const hand          = document.getElementById('hand');
+  const bag           = document.getElementById('bag');
   const startBtn      = document.getElementById('startBtn');
   const bookWrap      = document.querySelector('.book-container');
   const audioControls = document.getElementById('audioControls');
   const openBookBtn   = document.getElementById('openBookBtn');
 
-  const HAND_TIME = 34;
-  const TADA_TIME = 39;
+  const HAND_TIME = 30;
 
   function revealBook() {
+    scene2Audio.pause();
+    scene2Audio.currentTime = 0;
     scene2.classList.add('fade-out');
     audioControls.classList.add('hidden');
     setTimeout(() => {
@@ -42,25 +46,36 @@ function flipPage() {
     }, 600);
   });
 
-  // timeupdate: hand + scene1→scene2 transition
+  // scn1.mp3 ends → start shaking + play shuffle
+  audio.addEventListener('ended', () => {
+    bag.classList.add('shaking');
+    shuffleAudio.play();
+  });
+
+  // hand appears at HAND_TIME during scn1 audio
   audio.addEventListener('timeupdate', () => {
     const t = audio.currentTime;
-
     if (t >= HAND_TIME && !hand.classList.contains('visible')) {
       hand.classList.add('visible');
     }
+  });
 
-    if (t >= TADA_TIME && !scene1.classList.contains('fade-out')) {
-      scene1.classList.add('fade-out');
-      scene2.style.zIndex = 101;
-      setTimeout(() => scene1.classList.add('hidden'), 600);
-      scene2.classList.remove('hidden');
+  // bag click → stop shuffle, fade scene1, show scene2, play scene2Audio
+  bag.addEventListener('click', () => {
+    if (!shuffleAudio.paused === false && shuffleAudio.paused) return; // only clickable after shuffle starts
+    bag.classList.remove('shaking');
+    shuffleAudio.pause();
+    shuffleAudio.currentTime = 0;
+    scene1.classList.add('fade-out');
+    scene2.style.zIndex = 101;
+    setTimeout(() => scene1.classList.add('hidden'), 600);
+    scene2.classList.remove('hidden');
+    scene2Audio.play();
+    requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          document.getElementById('scn2img').classList.add('expanded');
-        });
+        document.getElementById('scn2img').classList.add('expanded');
       });
-    }
+    });
   });
 
   // play/pause
@@ -76,7 +91,6 @@ function flipPage() {
   audio.addEventListener('play',  () => { iconPlay.classList.add('hidden');    iconPause.classList.remove('hidden'); });
   audio.addEventListener('pause', () => { iconPlay.classList.remove('hidden'); iconPause.classList.add('hidden');    });
 
-  // slider sync
   audio.addEventListener('timeupdate', () => {
     if (audio.duration) audioSlider.value = (audio.currentTime / audio.duration) * 100;
   });
@@ -88,8 +102,8 @@ function flipPage() {
   // scene2 button → book
   openBookBtn.addEventListener('click', revealBook);
 
-  // audio ends → reveal book automatically if user hasn't clicked yet
-  audio.addEventListener('ended', () => {
+  // scene2Audio ends → reveal book
+  scene2Audio.addEventListener('ended', () => {
     if (!scene2.classList.contains('hidden')) revealBook();
   });
 })();

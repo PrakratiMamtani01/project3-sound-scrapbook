@@ -179,6 +179,35 @@ body {
     object-position: bottom;
 }
 
+.bag-overlay.shaking {
+    animation: bagShake 1.4s ease-in-out infinite;
+    transform-origin: bottom right;
+}
+
+@keyframes bagShake {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    20% {
+        transform: rotate(-4deg);
+    }
+
+    40% {
+        transform: rotate(3deg);
+    }
+
+    60% {
+        transform: rotate(-3deg);
+    }
+
+    80% {
+        transform: rotate(2deg);
+    }
+}
+
 .hand-overlay {
     position: absolute;
     bottom: 2%;
