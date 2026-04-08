@@ -1,17 +1,19 @@
 window.addEventListener("load", () => {
-    // scene 0/1/2 logic
-    const mainAudio = document.getElementById('mainAudio');
+    const mainAudio    = document.getElementById('mainAudio');
     const shuffleAudio = document.getElementById('shuffleAudio');
-    const scene2Audio = document.getElementById('scene2Audio');
-    const scene0 = document.getElementById('scene0');
-    const scene1 = document.getElementById('scene1');
-    const scene2 = document.getElementById('scene2');
-    const hand = document.getElementById('hand');
-    const bag = document.getElementById('bag');
-    const startBtn = document.getElementById('startBtn');
-    const openBookBtn = document.getElementById('openBookBtn');
-    const book = document.getElementById('book');
-    const HAND_TIME = 30;
+    const scene2Audio  = document.getElementById('scene2Audio');
+    const scene0       = document.getElementById('scene0');
+    const scene1       = document.getElementById('scene1');
+    const scene2       = document.getElementById('scene2');
+    const hand         = document.getElementById('hand');
+    const bag          = document.getElementById('bag');
+    const bagGlow      = document.getElementById('bagGlow');
+    const startBtn     = document.getElementById('startBtn');
+    const openBookBtn  = document.getElementById('openBookBtn');
+    const book         = document.getElementById('book');
+    const HAND_TIME    = 30;
+
+    let mainAudioEnded = false;
 
     function revealBook() {
         scene2Audio.pause();
@@ -38,19 +40,36 @@ window.addEventListener("load", () => {
     });
 
     mainAudio.addEventListener('ended', () => {
+        mainAudioEnded = true;
         bag.classList.add('shaking');
+        bagGlow.classList.add('active');
         shuffleAudio.play();
     });
 
+    // bidirectional hand + bag sync
     mainAudio.addEventListener('timeupdate', () => {
-        if (mainAudio.currentTime >= HAND_TIME && !hand.classList.contains('visible')) {
+        const t = mainAudio.currentTime;
+
+        if (t >= HAND_TIME) {
             hand.classList.add('visible');
+        } else {
+            hand.classList.remove('visible');
+        }
+
+        // if scrubbed back while in ended state, reset bag
+        if (mainAudioEnded && !mainAudio.ended) {
+            mainAudioEnded = false;
+            bag.classList.remove('shaking');
+            bagGlow.classList.remove('active');
+            shuffleAudio.pause();
+            shuffleAudio.currentTime = 0;
         }
     });
 
     bag.addEventListener('click', () => {
         if (shuffleAudio.paused) return;
         bag.classList.remove('shaking');
+        bagGlow.classList.remove('active');
         shuffleAudio.pause();
         shuffleAudio.currentTime = 0;
         scene1.classList.add('fade-out');
@@ -69,7 +88,6 @@ window.addEventListener("load", () => {
         if (!scene2.classList.contains('hidden')) revealBook();
     });
 
-    // wire play/pause controls to scene1 audios too
     [mainAudio, shuffleAudio, scene2Audio].forEach(a => {
         a.addEventListener('play', () => {
             if (a === currentAudio) {
@@ -89,15 +107,49 @@ window.addEventListener("load", () => {
             }
         });
     });
+
+    // expose to global scope for onclick handlers
+    window.goToScene2 = function () {
+        allAudios.forEach(a => { a.pause(); a.currentTime = 0; });
+        book.classList.add('book-hidden');
+        pages.forEach(p => { p.classList.remove('flipped'); p.style.zIndex = ''; });
+        currentPage = 0;
+        updateFlipBtn();
+        scene2.classList.remove('hidden');
+        scene2.classList.remove('fade-out');
+        scene2.style.zIndex = '';
+        // keep cover expanded since user has already opened it
+        document.getElementById('scn2img').classList.add('expanded');
+        currentAudio = scene2Audio;
+        scene2Audio.currentTime = 0;
+        scene2Audio.play();
+    };
+
+    window.goToScene1 = function () {
+        scene2Audio.pause();
+        scene2Audio.currentTime = 0;
+        scene2.classList.add('hidden');
+        scene2.classList.remove('fade-out');
+        // reset cover so re-clicking bag re-animates it
+        document.getElementById('scn2img').classList.remove('expanded');
+        scene1.classList.remove('hidden');
+        scene1.classList.remove('fade-out');
+        // restart scn1 from beginning
+        mainAudioEnded = false;
+        bag.classList.remove('shaking');
+        bagGlow.classList.remove('active');
+        shuffleAudio.pause();
+        shuffleAudio.currentTime = 0;
+        hand.classList.remove('visible');
+        mainAudio.currentTime = 0;
+        currentAudio = mainAudio;
+        mainAudio.play();
+    };
 });
 
 let currentPage = 0;
-
 const pages = document.querySelectorAll(".flip-page");
 
-/* ---------------- PAGE NAVIGATION ---------------- */
-
-// ONLY scene audios (no checklist here)
 const sceneFlowAudios = [
     document.getElementById("scene3Audio"),
     document.getElementById("scene4Audio"),
@@ -107,7 +159,6 @@ const sceneFlowAudios = [
     document.getElementById("scene8Audio"),
 ];
 
-// ALL audios (for controls + syncing)
 const allAudios = [
     ...sceneFlowAudios,
     document.getElementById("checklistAudio"),
@@ -123,21 +174,18 @@ function updateFlipBtn() {
     flipBtn.classList.toggle("hidden", currentPage >= pages.length);
 }
 
-// Navigate forward
 function flipPage() {
     if (currentPage < pages.length) {
         const page = pages[currentPage];
-
         page.style.zIndex = 100 + currentPage;
         page.classList.add("flipped");
-
         currentPage++;
         playSceneAudio(currentPage);
         updateFlipBtn();
 
         if (currentPage === pages.length) {
             const endScreen = document.getElementById('sceneEnd');
-            const endAudio = document.getElementById('endAudio');
+            const endAudio  = document.getElementById('endAudio');
             endScreen.classList.remove('hidden');
             requestAnimationFrame(() => requestAnimationFrame(() => {
                 endScreen.classList.add('visible');
@@ -147,7 +195,6 @@ function flipPage() {
     }
 }
 
-// Navigate backward
 function goBack() {
     const endScreen = document.getElementById('sceneEnd');
     if (!endScreen.classList.contains('hidden')) {
@@ -157,23 +204,17 @@ function goBack() {
 
     if (currentPage > 0) {
         currentPage--;
-
         const page = pages[currentPage];
-
         page.classList.remove("flipped");
         page.style.zIndex = "";
-
         playSceneAudio(currentPage);
         updateFlipBtn();
     }
 }
 
-/* ---------------- PAGE INTERACTIONS ---------------- */
-
 function revealMessage(event) {
     const img = event.currentTarget.querySelector("img");
     const trainAudio = document.getElementById("trainAudio");
-
     if (img.src.includes("train1.jpg")) {
         img.src = "assets/scene5/train2.jpg";
         playSpecificAudio(trainAudio);
@@ -185,10 +226,8 @@ function revealMessage(event) {
 function revealChecklist(event) {
     const img = event.currentTarget.querySelector("img");
     const checklistAudio = document.getElementById("checklistAudio");
-
     if (img.src.includes("checklist1.jpg")) {
         img.src = "assets/scene4/checklist2.jpg";
-
         playSpecificAudio(checklistAudio);
     } else {
         img.src = "assets/scene4/checklist1.jpg";
@@ -200,35 +239,24 @@ function sayDialogue(event) {
     playSpecificAudio(dialogueAudio);
 }
 
-/* ---------------- AUDIO SYSTEM ---------------- */
-
-// Play based on scene flow
 function playSceneAudio(index) {
     const audio = sceneFlowAudios[index];
     if (!audio) return;
-
     playSpecificAudio(audio);
 }
 
-// Generic audio player (used everywhere)
 function playSpecificAudio(audio) {
-    allAudios.forEach(a => {
-        a.pause();
-        a.currentTime = 0;
-    });
-
+    allAudios.forEach(a => { a.pause(); a.currentTime = 0; });
     currentAudio = audio;
     currentAudio.play();
 }
 
-/* ---------------- CONTROLS ---------------- */
-
 const playPauseBtn = document.getElementById('playPauseBtn');
-const iconPlay = document.getElementById('iconPlay');
-const iconPause = document.getElementById('iconPause');
-const audioSlider = document.getElementById('audioSlider');
+const iconPlay     = document.getElementById('iconPlay');
+const iconPause    = document.getElementById('iconPause');
+const audioSlider  = document.getElementById('audioSlider');
+const audioControls = document.getElementById('audioControls');
 
-// Play / Pause button
 playPauseBtn.addEventListener('click', () => {
     if (currentAudio.paused) {
         currentAudio.play();
@@ -237,7 +265,6 @@ playPauseBtn.addEventListener('click', () => {
     }
 });
 
-// ICON SYNC (for ALL audios)
 allAudios.forEach(audio => {
     audio.addEventListener('play', () => {
         if (audio === currentAudio) {
@@ -245,7 +272,6 @@ allAudios.forEach(audio => {
             iconPause.classList.remove('hidden');
         }
     });
-
     audio.addEventListener('pause', () => {
         if (audio === currentAudio) {
             iconPlay.classList.remove('hidden');
@@ -254,7 +280,6 @@ allAudios.forEach(audio => {
     });
 });
 
-// SLIDER SYNC
 allAudios.forEach(audio => {
     audio.addEventListener('timeupdate', () => {
         if (audio === currentAudio && audio.duration) {
@@ -263,10 +288,8 @@ allAudios.forEach(audio => {
     });
 });
 
-// SCRUB
 audioSlider.addEventListener('input', () => {
     if (currentAudio.duration) {
-        currentAudio.currentTime =
-            (audioSlider.value / 100) * currentAudio.duration;
+        currentAudio.currentTime = (audioSlider.value / 100) * currentAudio.duration;
     }
 });

@@ -269,11 +269,13 @@ body {
     width: 38%;
     object-fit: contain;
     object-position: bottom;
+    z-index: 1;
 }
 
 .bag-overlay.shaking {
     animation: bagShake 1.4s ease-in-out infinite;
     transform-origin: bottom right;
+    z-index: 1;
 }
 
 @keyframes bagShake {
@@ -310,11 +312,13 @@ body {
     opacity: 0;
     transition: opacity 0.2s ease;
     transform: rotate(45deg);
+    z-index: 2;
 }
 
 .hand-overlay.visible {
     opacity: 1;
     transform: rotate(45deg);
+    z-index: 2;
 }
 
 /* SCENE 2 */
@@ -466,4 +470,50 @@ body {
 
 .book-hidden {
     visibility: hidden;
+}
+
+/* BAG GLOW */
+.bag-glow {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 38%;
+    height: 60%;
+    background: radial-gradient(ellipse at center bottom, #F3ED08 0%, transparent 70%);
+    filter: blur(35px);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.bag-glow.active {
+    opacity: 0.65;
+}
+
+/* ensure bag sits above glow */
+.bag-overlay {
+    z-index: 1;
+}
+
+/* SCENE 2 BACK BUTTON */
+.scene2-back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: transparent;
+    border: 1px solid rgba(80, 50, 20, 0.4);
+    color: rgba(80, 50, 20, 0.8);
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    padding: 8px 20px;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    z-index: 102;
+    transition: border-color 0.3s;
+}
+
+.scene2-back-btn:hover {
+    border-color: rgba(80, 50, 20, 1);
 }
