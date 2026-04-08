@@ -1,17 +1,17 @@
 window.addEventListener("load", () => {
     // scene 0/1/2 logic
-    const mainAudio    = document.getElementById('mainAudio');
+    const mainAudio = document.getElementById('mainAudio');
     const shuffleAudio = document.getElementById('shuffleAudio');
-    const scene2Audio  = document.getElementById('scene2Audio');
-    const scene0       = document.getElementById('scene0');
-    const scene1       = document.getElementById('scene1');
-    const scene2       = document.getElementById('scene2');
-    const hand         = document.getElementById('hand');
-    const bag          = document.getElementById('bag');
-    const startBtn     = document.getElementById('startBtn');
-    const openBookBtn  = document.getElementById('openBookBtn');
-    const book         = document.getElementById('book');
-    const HAND_TIME    = 30;
+    const scene2Audio = document.getElementById('scene2Audio');
+    const scene0 = document.getElementById('scene0');
+    const scene1 = document.getElementById('scene1');
+    const scene2 = document.getElementById('scene2');
+    const hand = document.getElementById('hand');
+    const bag = document.getElementById('bag');
+    const startBtn = document.getElementById('startBtn');
+    const openBookBtn = document.getElementById('openBookBtn');
+    const book = document.getElementById('book');
+    const HAND_TIME = 30;
 
     function revealBook() {
         scene2Audio.pause();
@@ -112,6 +112,7 @@ const allAudios = [
     ...sceneFlowAudios,
     document.getElementById("checklistAudio"),
     document.getElementById("trainAudio"),
+    document.getElementById("dialogueAudio"),
 ];
 
 let currentAudio = sceneFlowAudios[0];
@@ -136,7 +137,7 @@ function flipPage() {
 
         if (currentPage === pages.length) {
             const endScreen = document.getElementById('sceneEnd');
-            const endAudio  = document.getElementById('endAudio');
+            const endAudio = document.getElementById('endAudio');
             endScreen.classList.remove('hidden');
             requestAnimationFrame(() => requestAnimationFrame(() => {
                 endScreen.classList.add('visible');
@@ -192,6 +193,11 @@ function revealChecklist(event) {
     } else {
         img.src = "assets/scene4/checklist1.jpg";
     }
+}
+
+function sayDialogue(event) {
+    const dialogueAudio = document.getElementById("dialogueAudio");
+    playSpecificAudio(dialogueAudio);
 }
 
 /* ---------------- AUDIO SYSTEM ---------------- */
