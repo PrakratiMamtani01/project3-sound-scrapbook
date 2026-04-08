@@ -1,141 +1,136 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>meant to be?</title>
     <link rel="stylesheet" href="style.css" />
-</head>
+  </head>
 
-<body>
-
+  <body>
     <!-- SCENE 0 -->
     <div id="scene0" class="scene-overlay scene0-bg">
-        <div class="scene0-content">
-            <p class="scene0-title">meant to be?</p>
-            <p class="scene0-sub">a scrapbook</p>
-            <button id="startBtn" class="start-btn">open</button>
-        </div>
+      <div class="scene0-content">
+        <p class="scene0-title">meant to be?</p>
+        <p class="scene0-sub">a scrapbook</p>
+        <button id="startBtn" class="start-btn">open</button>
+      </div>
     </div>
 
     <!-- SCENE 1 -->
     <div id="scene1" class="scene-overlay hidden">
-        <div class="train-bg"></div>
-        <img src="assets/scene1-2/scn1.png" id="bag" class="bag-overlay" style="cursor: pointer" />
-        <img src="assets/scene1-2/hand.png" id="hand" class="hand-overlay" />
+      <div class="train-bg"></div>
+      <div id="bagGlow" class="bag-glow"></div>
+      <img
+        src="assets/scene1-2/scn1.png"
+        id="bag"
+        class="bag-overlay"
+        style="cursor: pointer"
+      />
+      <img src="assets/scene1-2/hand.png" id="hand" class="hand-overlay" />
     </div>
 
     <!-- SCENE 2 -->
     <div id="scene2" class="scene-overlay hidden">
-        <img id="scn2img" src="assets/scene1-2/scn2.png" class="cover-full" />
-        <button id="openBookBtn" class="open-book-btn">open the scrapbook</button>
+      <img id="scn2img" src="assets/scene1-2/scn2.png" class="cover-full" />
+      <button class="scene2-back-btn" onclick="goToScene1()">← Back</button>
+      <button id="openBookBtn" class="open-book-btn">open the scrapbook</button>
     </div>
 
     <!-- SCENE END -->
     <div id="sceneEnd" class="scene-overlay scene-end hidden">
-        <div class="train-bg"></div>
-        <div class="scene-end-content">
-            <p class="scene0-title">the end</p>
-            <button class="start-btn" onclick="location.reload()">start over</button>
-        </div>
+      <div class="train-bg"></div>
+      <div class="scene-end-content">
+        <p class="scene0-title">the end</p>
+        <button class="start-btn" onclick="location.reload()">
+          start over
+        </button>
+      </div>
     </div>
 
     <div id="book" class="book-hidden">
+      <div class="page static-left" id="leftPage">
+        <img src="assets/scene3/scene3-left.jpg" id="leftImg" />
+        <button class="back-btn" onclick="goToScene2()">← Back</button>
+      </div>
 
-        <div class="page static-left" id="leftPage">
-            <img src="assets/scene3/scene3-left.jpg" id="leftImg" />
+      <!-- Scene 3 -->
+      <div class="page flip-page" id="scene3Flip">
+        <div class="front">
+          <img src="assets/scene3/scene3-right.jpg" alt="Scene 3 Right" />
         </div>
-
-        <!-- Scene 3 -->
-        <div class="page flip-page" id="scene3Flip">
-            <div class="front">
-                <img src="assets/scene3/scene3-right.jpg" alt="Scene 3 Right" />
-            </div>
-            <div class="back">
-                <img src="assets/scene4/scene4-left.jpg" alt="Scene 4 Right" />
-                <button id="checklist-btn" onclick="revealChecklist(event)">
-                    <img src="assets/scene4/checklist1.jpg" />
-                </button>
-                <button class="back-btn" onclick="goBack()">
-                    ← Back
-                </button>
-            </div>
+        <div class="back">
+          <img src="assets/scene4/scene4-left.jpg" alt="Scene 4 Right" />
+          <button id="checklist-btn" onclick="revealChecklist(event)">
+            <img src="assets/scene4/checklist1.jpg" />
+          </button>
+          <button class="back-btn" onclick="goBack()">← Back</button>
         </div>
+      </div>
 
-        <!-- Scene 4 -->
-        <div class="page flip-page" id="scene4Flip">
-            <div class="front">
-                <img src="assets/scene4/scene4-right.jpg" alt="Scene 4 Right" />
-            </div>
-            <div class="back">
-                <img src="assets/scene5/scene5-left.jpg" alt="Scene 5 Right" />
-                <button id="message-btn" onclick="revealMessage(event)">
-                    <img src="assets/scene5/train1.jpg" />
-                </button>
-                <button class="back-btn" onclick="goBack()">
-                    ← Back
-                </button>
-            </div>
+      <!-- Scene 4 -->
+      <div class="page flip-page" id="scene4Flip">
+        <div class="front">
+          <img src="assets/scene4/scene4-right.jpg" alt="Scene 4 Right" />
         </div>
-
-        <!-- Scene 5  -->
-        <div class="page flip-page" id="scene5Flip">
-            <div class="front">
-                <img src="assets/scene5/scene5-right.jpg" alt="Scene 5 Right" />
-            </div>
-            <div class="back">
-                <img src="assets/scene6/scene6-left.jpg" alt="Scene 6 Left" />
-                <button class="back-btn" onclick="goBack()">
-                    ← Back
-                </button>
-            </div>
+        <div class="back">
+          <img src="assets/scene5/scene5-left.jpg" alt="Scene 5 Right" />
+          <button id="message-btn" onclick="revealMessage(event)">
+            <img src="assets/scene5/train1.jpg" />
+          </button>
+          <button class="back-btn" onclick="goBack()">← Back</button>
         </div>
+      </div>
 
-        <div class="page flip-page" id="scene6Flip">
-            <div class="front">
-                <img src="assets/scene6/scene6-right.jpg" />
-            </div>
-            <div class="back">
-                <img src="assets/scene7/scene7-left.png" />
-                <button class="back-btn" onclick="goBack()">
-                    ← Back
-                </button>
-            </div>
+      <!-- Scene 5  -->
+      <div class="page flip-page" id="scene5Flip">
+        <div class="front">
+          <img src="assets/scene5/scene5-right.jpg" alt="Scene 5 Right" />
         </div>
-
-        <!-- Scene 7 -->
-        <div class="page flip-page" id="scene7Flip">
-            <div class="front">
-                <img src="assets/scene7/scene7-right.png" />
-                <button id="dialogue-btn" onclick="sayDialogue(event)">
-                    <img src="assets/scene7/dialogue.jpg" />
-                </button>
-            </div>
-            <div class="back">
-                <img src="assets/scene8/scene8-left.png" />
-                <button class="back-btn" onclick="goBack()">
-                    ← Back
-                </button>
-            </div>
+        <div class="back">
+          <img src="assets/scene6/scene6-left.jpg" alt="Scene 6 Left" />
+          <button class="back-btn" onclick="goBack()">← Back</button>
         </div>
+      </div>
 
-        <!-- Scene 8 -->
-        <div class="page flip-page" id="scene8Flip">
-            <div class="front">
-                <img src="assets/scene8/scene8-right.png" />
-            </div>
-            <div class="back">
-                <img src="assets/scene8/button.jpg" style="object-fit:cover" />
-                <button class="back-btn" onclick="goBack()">
-                    ← Back
-                </button>
-            </div>
+      <div class="page flip-page" id="scene6Flip">
+        <div class="front">
+          <img src="assets/scene6/scene6-right.jpg" />
         </div>
+        <div class="back">
+          <img src="assets/scene7/scene7-left.png" />
+          <button class="back-btn" onclick="goBack()">← Back</button>
+        </div>
+      </div>
 
-        <button class="flip-btn" onclick="flipPage(event)">
-            <img src="assets/button.jpg" />
-        </button>
+      <!-- Scene 7 -->
+      <div class="page flip-page" id="scene7Flip">
+        <div class="front">
+          <img src="assets/scene7/scene7-right.png" />
+          <button id="dialogue-btn" onclick="sayDialogue(event)">
+            <img src="assets/scene7/dialogue.jpg" />
+          </button>
+        </div>
+        <div class="back">
+          <img src="assets/scene8/scene8-left.png" />
+          <button class="back-btn" onclick="goBack()">← Back</button>
+        </div>
+      </div>
+
+      <!-- Scene 8 -->
+      <div class="page flip-page" id="scene8Flip">
+        <div class="front">
+          <img src="assets/scene8/scene8-right.png" />
+        </div>
+        <div class="back">
+          <img src="assets/scene8/button.jpg" style="object-fit: cover" />
+          <button class="back-btn" onclick="goBack()">← Back</button>
+        </div>
+      </div>
+
+      <button class="flip-btn" onclick="flipPage(event)">
+        <img src="assets/button.jpg" />
+      </button>
     </div>
 
     <!-- AUDIO ELEMENTS -->
@@ -151,23 +146,42 @@
     <audio id="scene7Audio" src="assets/scene7/scene7.mov"></audio>
     <audio id="dialogueAudio" src="assets/scene7/dialogue.mov"></audio>
     <audio id="scene8Audio" src="assets/scene8/scene8.mp3"></audio>
-
     <audio id="endAudio" src="assets/scene8/nature.mp3" loop></audio>
 
-    <!-- AUDIO CONTROLS (reuse your CSS) -->
+    <!-- AUDIO CONTROLS -->
     <div class="audio-controls hidden" id="audioControls">
-        <button class="play-pause-btn" id="playPauseBtn" aria-label="Play/Pause">
-            <svg id="iconPlay" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                <path d="M8 5v14l11-7z" />
-            </svg>
-            <svg id="iconPause" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" class="hidden">
-                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-            </svg>
-        </button>
-        <input type="range" id="audioSlider" class="audio-slider" min="0" max="100" value="0" step="0.1" />
+      <button class="play-pause-btn" id="playPauseBtn" aria-label="Play/Pause">
+        <svg
+          id="iconPlay"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          width="20"
+          height="20"
+        >
+          <path d="M8 5v14l11-7z" />
+        </svg>
+        <svg
+          id="iconPause"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          width="20"
+          height="20"
+          class="hidden"
+        >
+          <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+        </svg>
+      </button>
+      <input
+        type="range"
+        id="audioSlider"
+        class="audio-slider"
+        min="0"
+        max="100"
+        value="0"
+        step="0.1"
+      />
     </div>
 
     <script src="script.js"></script>
-</body>
-
+  </body>
 </html>
