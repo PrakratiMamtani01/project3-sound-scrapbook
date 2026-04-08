@@ -15,6 +15,3 @@ Communications Lab: Professor Jack B Du
 
 ## Running locally
 Open `index.html` in a browser. No build step required.
-
-## Assets
-All audio and images live in `assets/` organized by scene. Audio files are `.mp3` or `.mov`. The train background is a `.gif`.
